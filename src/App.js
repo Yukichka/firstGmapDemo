@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Gmaps, Marker } from "react-gmaps";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const jsonData = [
+  { city: "paris", lat: 48.864716, lng: 2.349014 },
+  { city: "milan", lat: 45.464211, lng: 9.191383 }
+];
+
+const params = { v: "3.exp", key: "AIzaSyDpm9Z-4a-U-JeKY44oW9rVRjUoRe6tGz0" };
+
+class App extends React.Component {
+  onMapCreated(map) {
+    map.setOptions({
+      disableDefaultUI: true
+    });
+  }
+
+  onDragEnd(e) {
+    console.log("onDragEnd", e);
+  }
+
+  render() {
+    return (
+      <Gmaps
+        width={"800px"}
+        height={"600px"}
+        lat={48.864716}
+        lng={2.349014}
+        zoom={3}
+        loadingMessage={"Loading map"}
+        params={params}
+        onMapCreated={this.onMapCreated}
+      >
+        {jsonData.map((location, idx) => (
+          <Marker
+            lat={location.lat}
+            lng={location.lng}
+            draggable={true}
+            onDragEnd={this.onDragEnd}
+            key={idx}
+          />
+        ))}
+      </Gmaps>
+    );
+  }
 }
 
 export default App;
